@@ -37,8 +37,12 @@ let newSnnDn: TSnnDn = null || 5 || new Date() || "text";
 г) объявить переменную с типом "массив пользователей" (использовать интерфейс из пунтка "в") и заполнить массив парами соответствующих объектов
 ========================================*/
 
-interface IRole {
-	role: "guest" | "manager" | "staff" | "admin" | "owner"
+enum ERole {
+	 Guest = "guest",
+	 Manager = "manager",
+	 Staff = "staff",
+	 Admin = "admin",
+	 Owner = "owner"
 }
 
 interface IAddress {
@@ -54,7 +58,7 @@ interface IUser {
 	email: String,
 	address?: IAddress,
 	gender?: "f" | "m",
-	role?: IRole["role"]
+	role?: ERole
 }
 
 let users: IUser[] = [
@@ -68,7 +72,7 @@ let users: IUser[] = [
 			postcode: 1
 		},
 		gender: "f",
-		role: "owner"
+		role: ERole.Admin
 	},
 	{
 		name: "Oleg",
@@ -80,7 +84,7 @@ let users: IUser[] = [
 			postcode: 1
 		},
 		gender: "m",
-		role: "staff"
+		role: ERole.Owner
 	}
 ]
 
@@ -98,13 +102,13 @@ interface IName {
 	name: string
 }
 
-const printNames = (items: Array<IName & { name: string, [key: string]: any }>) => {
+const printNames = <T extends IName>(items: T[]) => {
 	items.forEach(item => console.log(item.name));
 }
 
 printNames([{ name: 'ook' }]);
 printNames([{ age: 2, name: 'ook' }]);
-printNames([{ lastName: 'test', name: 'ook' }]);
+printNames([{ lastName: 'test', name:'ook'}]);
 
 
 
@@ -113,12 +117,14 @@ printNames([{ lastName: 'test', name: 'ook' }]);
 Создать свой собственный утилитный тип, который может принимать два типа (или интерфейса) и объединять их.
 ========================================*/
 
+
 interface IPerson { name: string, age: number }
+interface IRole { role: string }
 
 type Combine<I1,I2> = I1 & I2;
 
 const user: Combine<IPerson, IRole> = { // the IRole interface is declared above
 	name: 'John',
 	age: 18,
-	role: 'guest',
+	role: "guest",
 };
